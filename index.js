@@ -1,11 +1,19 @@
-const http = require('http')
+const Application = require('./src/Application')
+const Router = require('./src/Router')
 require('dotenv').config()
 
-const PORT = process.env.PORT
+const app = new Application()
+const router = new Router()
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' }),
-  res.end('<h1>Server works!</h1>')
+const PORT = process.env.PORT
+app.listen(PORT, () => console.log(`Server start on PORT ${PORT}`))
+
+router.get('/users', (req, res) => {
+  res.end('USERS HERE')
 })
 
-server.listen(PORT, () => console.log(`Server start on PORT ${PORT}`))
+router.get('/posts', (req, res) => {
+  res.end('POSTS HERE')
+})
+
+app.addRouter(router)

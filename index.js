@@ -1,19 +1,15 @@
-const Application = require('./src/Application')
-const Router = require('./src/Router')
+const Application = require('./src/framework/Application')
+const userRouter = require('./src/user_router')
+const JsonParser = require('./src/framework/JsonParser')
+const BodyParser = require('./src/framework/BodyParser')
+const UrlParser = require('./src/framework/UrlParser')
 require('dotenv').config()
 
 const app = new Application()
-const router = new Router()
-
+app.useMiddleware(JsonParser)
+app.useMiddleware(UrlParser('http://localhost:5001'))
+app.useMiddleware(BodyParser)
 const PORT = process.env.PORT
 app.listen(PORT, () => console.log(`Server start on PORT ${PORT}`))
 
-router.get('/users', (req, res) => {
-  res.end('USERS HERE')
-})
-
-router.get('/posts', (req, res) => {
-  res.end('POSTS HERE')
-})
-
-app.addRouter(router)
+app.addRouter(userRouter)

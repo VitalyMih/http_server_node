@@ -1,18 +1,17 @@
-const users = [
-  { id: 1, name: 'Vitalii' },
-  { id: 2, name: 'Georgii' }
-]
+const User = require('./user_model')
 
-const getUsers = (req, res) => {
+const getUsers = async(req, res) => {
+  let users
   if (req.params.user_id) {
-    res.send(users.find((user) => user.id === Number(req.params.user_id)))
+    users = await User.findById(req.params.user_id)
+  } else {
+    users = User.find()
   }
   res.send(users)
 }
 
-const createUser = (req, res) => {
-  const user = req.body
-  users.push(user)
+const createUser = async(req, res) => {
+  const user = User.create(req.body)
   res.send(user)
 }
 
